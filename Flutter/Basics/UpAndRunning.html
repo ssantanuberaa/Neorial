@@ -2,11 +2,11 @@
 <html>
 <head>
 	<title>Up and Running</title>
-	<link rel="stylesheet" type="text/css" href="../Assets/bulma.css">
-	<link rel="stylesheet" type="text/css" href="../Assets/Style.css">
-	<script type="text/javascript" src="../Assets/prism.min.js"></script>
-	<script type="text/javascript" src="../Assets/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Assets/prism-dark.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/bulma.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/Style.css">
+	<script type="text/javascript" src="../../Assets/prism.min.js"></script>
+	<script type="text/javascript" src="../../Assets/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../Assets/prism-dark.css">
 </head>
 <body class="Body">
 <div class="Content Card">
@@ -78,7 +78,7 @@ void runApp(Widget app) {
   // ---
 }
 </pre>
-<p>The <code>runApp</code> method returns nothing. And it takes a widget as a parameter. This widget is used to draw the screen. It fills the entire screen by default. If you wish to align your widget to one side of the screen (e.g., the top), consider using the <code>Align</code> widget. If you wish to center your widget, you can also use the <code>Center</code> widget.</p>
+<p>The <code>runApp</code> method returns nothing. And it takes a widget as a parameter. This widget is used to draw the screen. It fills the entire screen by default. If you wish to align your widget to one side of the screen (e.g., the top), consider using the <code>Align</code> widget. If you wish to center your widget, you need to use the <code>Center</code> widget.</p>
 <p>Calling <code>runApp</code> again will detach the previous root widget from the screen and attach the given widget in its place. The new widget tree is compared against the previous widget tree and any differences are applied to the underlying render tree, similar to what happens when a <code>StatefulWidget</code> rebuilds after calling <code>State.setState</code>.</p>
 
 <h2>Creating Widget</h2>
@@ -106,7 +106,7 @@ class HelloWorldApp extends StatelessWidget {
 <p>In the example above we don't have any data to store. And that's why are are extending <code>StatelessWidget</code> to create a stateless widget.</p>
 
 <h2>build()</h2>
-<p>When you are creating layouts you need to define the structure of your layout somewhere in the code. And the predefined method of <code>StatelessWidget</code> class is the place where you need to define that. On the other hand, this method describes the part of the user interface represented by this widget. This method is predefined in the <code>StatelessWidget</code> class and our derived class must define it. This method must return the definition of the widget, or the structure of the UI.</p>
+<p>When you are creating layouts you need to define the structure of your layout somewhere in the code. And the predefined method of <code>StatelessWidget</code> class is the place where you need to define that. On the other hand, this method describes the part of the user interface represented by this widget. This method is predefined in the <code>StatelessWidget</code> class and our derived class must override it. This method must return the definition of the widget, or the structure of the UI.</p>
 <p>The widget that are are returning is:</p>
 <pre>
 new MaterialApp(

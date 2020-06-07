@@ -211,6 +211,50 @@ decoration: new BoxDecoration(
 
 
 
+<h1>DecoratedBox</h1>
+<p>DecorationBox allows you to set decoration on the Box. In all the above example we are using <code>Container</code> widget to set the decoration. But Container widget is combination of multiple widget. When you are using the argument <code>decoration</code> on Container widget, the widget internally uses <code>DecoratedBox</code> and passes the value of the <code>decoration</code> argument to the <code>DecorationBox</code> widget.</p>
+
+<p>A widget that paints a Decoration either before or after its child paints. <code>Container</code> insets its child by the widths of the borders; this widget does not.</p>
+<pre>
+DecoratedBox(
+  decoration: BoxDecoration(
+    gradient: RadialGradient(
+      center: const Alignment(-0.5, -0.6),
+      radius: 0.15,
+      colors: &lt;Color>[
+        const Color(0xFFEEEEEE),
+        const Color(0xFF111133),
+      ],
+      stops: &lt;double>[0.9, 1.0],
+    ),
+  ),
+)
+</pre>
+
+<h2>DecorationPosition</h2>
+<p>This widget takes a <code>position</code> argument which is optional. It specifies whether to paint the box decoration behind or in front of the child. Use <code>DecorationPosition</code> enum to provide the value. It defines following two constants:</p>
+<ul>
+  <li><code>forground</code>: Paint the box decoration in front of the children.</li>
+  <li><code>background</code>: Paint the box decoration behind the children. This is the default value.</li>
+</ul>
+<pre>
+DecoratedBox(
+  decoration: BoxDecoration(
+    positon: DecorationPosition.forground,
+    gradient: RadialGradient(
+      center: const Alignment(-0.5, -0.6),
+      radius: 0.15,
+      colors: &lt;Color>[
+        const Color(0xFFEEEEEE),
+        const Color(0xFF111133),
+      ],
+      stops: &lt;double>[0.9, 1.0],
+    ),
+  ),
+)
+</pre>
+
+
 
 </div>
 </body>
