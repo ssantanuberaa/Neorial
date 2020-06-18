@@ -258,12 +258,55 @@ contentPadding: EdgeInsets.fromLTRB(12, 12, 12, 12),
 
 
 <h2>Disable the TextField</h2>
-<p>To disable the TextField use <code>enabled</code> property.</p>
+<p>When the TextField is disabled, you should also set <code>enabled</code> property of <code>InputDecoration</code> to <code>false</code> to maintain the visual display. When the <code>enabled</code> property is set to <code>false</code>, the <code>helperText</code>, <code>errorText</code> and <code>counterText</code> are not displayed.</p>
 <h3>enabled</h3>
 <p>If <code>false</code>, <code>helperText</code>, <code>errorText</code>, and <code>counterText</code> are not displayed, and the opacity of the remaining visual elements is reduced.</p>
 
 
-
+<h2>Examples</h2>
+<h3>Example 1</h3>
+<pre>
+Widget build(BuildContext context) {
+  return TextField(
+    decoration: InputDecoration(
+      icon: Icon(Icons.send),
+      hintText: 'Hint Text',
+      helperText: 'Helper Text',
+      counterText: '0 characters',
+      border: const OutlineInputBorder(),
+    ),
+  );
+}
+</pre>
+<p>The above code will produce the following output:</p>
+<img src="../../Assets/flutter/input_decoration.png">
+<h3>Example 2</h3>
+<pre>
+Widget build(BuildContext context) {
+  return TextFormField(
+    initialValue: 'abc',
+    decoration: const InputDecoration(
+      prefix: Text('Prefix'),
+      suffix: Text('Suffix'),
+      border: OutlineInputBorder(),
+    ),
+  );
+}
+</pre>
+<img src="../../Assets/flutter/input_decoration_prefix_suffix.png">
+<h3>Example 3</h3>
+<pre>
+Widget build(BuildContext context) {
+  return TextField(
+    decoration: InputDecoration(
+      hintText: 'Hint Text',
+      errorText: 'Error Text',
+      border: OutlineInputBorder(),
+    ),
+  );
+}
+</pre>
+<img src="../../Assets/flutter/input_decoration_error.png">
 
 
 
