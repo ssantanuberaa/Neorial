@@ -38,12 +38,17 @@ sudo mysql
 </pre>
 <p>Now you can run any mysql script or statement.</p>
 <p>It will login you as root user. Note that as you are using terminal you won't be asked to password for root user to get into the server. But if you do that from any external program, you will be asked to provide the password.</p>
-<p>If you want to login to your MySQL server as root from an external program such as <code>phpMyAdmin</code> you can follow below option.</p>
+<p>If you want to login to your MySQL server as root from an external program such as <code>phpMyAdmin</code> you need to configure the MySQL first.</p>
 <p>Change the authentication method from <code>auth_socket</code> to <code>mysql_native_password</code>. You can do that by running the following command:</p>
 <pre>
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'very_strong_password';
 FLUSH PRIVILEGES;
 </pre>
+<p>Now you can connect to the MySQL database using hostname, port, databasename, username and password. As you have changed the authentication method the command <code>sudo mysql</code> won't work anymore. You must need to provide user and password. Type the following command:</p>
+<pre>
+mysql -u root -p
+</pre>
+<p>This will prompt you for password. Provide password and you will be able to get into the server. Here <code>root</code> is the name of the user, if you want to use different username replace <code>root</code> with other username.</p>
 
 
 
