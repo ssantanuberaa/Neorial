@@ -134,6 +134,55 @@ print(list.length); // 0
 
 
 
+<h1>List<E>.generate() Constructor</h1>
+<p>One of very handy utility in Dart is the ability to generate a list of values.</p>
+<pre>
+List&lt;E>.generate(
+  int length,
+  E generator(
+    int index
+  ), {
+  bool growable: true
+})
+</pre>
+<p>The first parameter is to specify the size of the list.</p>
+<p>The second parameter is a generator callback that produces list values. It receives new index for each new item in increasing order. The callback must return the value which is the list item.</p>
+<p>The created list is fixed-length unless <code>growable</code> is <code>true</code>.</p>
+<p>The following example generates all numbers from 1 to 10.</p>
+<pre>
+new List&lt;int>.generate(10, (i) => i + 1)
+</pre>
+<p>We can generate all square numbers.</p>
+<pre>
+new List&lt;int>.generate(10, (i) => i * i)
+</pre>
+<p>A more practical application of <code>List.generate</code> constructor is to generate a list of widget from a list of items.</p>
+<pre>
+List daysData = [
+	{"label": "7 Days", "value": 7},
+	{"label": "15 Days", "value": 15},
+	{"label": "30 Days", "value": 30},
+	{"label": "60 Days", "value": 60},
+	{"label": "100 Days", "value": 100},
+];
+
+@override
+Widget build(BuildContext context) {
+	return Row(
+		children: List.generate(daysData.length, (int index) {
+			Map&lt;String, dynamic> dayData = daysData[index];
+			String dayLabel = dayData["label"];
+  			return Padding(
+				padding: EdgeInsets.only(right: 15),
+				child: Text("$dayLabel"),
+			);
+		}),
+	);
+}
+</pre>
+
+
+
 
 
 
