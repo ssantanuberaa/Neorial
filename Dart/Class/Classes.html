@@ -2,17 +2,11 @@
 <html>
 <head>
 	<title>Class</title>
-	<link rel="stylesheet" type="text/css" href="../Assets/bulma.css">
-	<link rel="stylesheet" type="text/css" href="../Assets/Style.css">
-	<script type="text/javascript" src="../Assets/prism.min.js"></script>
-	<script type="text/javascript" src="../Assets/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Assets/prism-dark.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/bulma.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/Style.css">
 </head>
 <body class="Body">
 <div class="Content Card">
-
-
-
 
 
 
@@ -27,6 +21,7 @@
 	<li>Instance Methods</li>
 	<li>Getter/Setter</li>
 	<li>Constructors</li>
+  <li>Private members</li>
 </ul>
 
 
@@ -68,7 +63,14 @@ class Point {
 
 
 <h1>Constructor</h1>
-<p>Declare a constructor by creating a function with the same name as its class. Here is an example:</p>
+<p>Constructors are of two types:</p>
+<ul>
+  <li>Unnamed Constructor</li>
+  <li>Named Constructor</li>
+</ul>
+
+<h2>Unnamed Constructor</h2>
+<p>Declare a unnamed constructor by creating a function with the same name as its class. Here is an example:</p>
 <pre>
 class Point {
   num x, y;
@@ -93,12 +95,12 @@ class Point {
 </pre>
 
 <h3>Default Constructor</h3>
-<p>If you don’t declare a constructor, a default constructor is provided for you. The default constructor has no arguments.</p>
+<p>If you don’t declare a constructor, a default constructor is provided for you. The default constructor has no arguments and it is a unnamed constructor, which means the default constructor has the same name of the class name.</p>
 
 <h3>Constructors are not Inherited</h3>
-<p>Subclasses don’t inherit constructors from their superclass. A subclass that declares no constructors has only the default (no argument, no name) constructor.</p>
+<p>Subclasses don’t inherit constructors from their superclass. A subclass that declares no constructors has only the default constructor.</p>
 
-<h3>Named Constructor</h3>
+<h2>Named Constructor</h2>
 <p>Use a named constructor to implement multiple constructors for a class or to provide extra clarity:</p>
 <pre>
 class Point {
@@ -113,11 +115,8 @@ class Point {
   }
 }
 </pre>
+<p>Here we have a named constructor <code>Point.origin()</code>.</p>
 <p>Remember that constructors are not inherited, which means that a superclass’s named constructor is not inherited by a subclass.</p>
-
-
-
-
 
 
 
@@ -144,57 +143,7 @@ class Point {
 
 
 
-
-<h1>Getters and setters</h1>
-<p>Getters and setters are special methods that provide read and write access to an object’s properties. Recall that each instance variable has an implicit getter, plus a setter if appropriate. You can create additional properties by implementing getters and setters, using the <code>get</code> and <code>set</code> keywords:</p>
-<pre>
-class Rectangle {
-  num left, top, width, height;
-
-  Rectangle(this.left, this.top, this.width, this.height);
-
-  // Define two calculated properties: right and bottom.
-  num get right => left + width;
-  set right(num value) => left = value - width;
-  num get bottom => top + height;
-  set bottom(num value) => top = value - height;
-}
-
-void main() {
-  var rect = Rectangle(3, 4, 20, 15);
-  assert(rect.left == 3);
-  rect.right = 12;
-  assert(rect.left == -8);
-}
-</pre>
-<p>Note that, the followings are similar:</p>
-<pre>
-num get right => left + width;
-
-// Same as,
-
-num get right{
-	return left + width;
-}
-</pre>
-<p>And,</p>
-<pre>
-set right(num value) => left = value - width;
-
-// Same as,
-
-set right(num value){
-	left = value - width;
-}
-</pre>
-
-
-
-
-
-
-
-<h1>Using class members</h1>
+<h1>Using instance members</h1>
 <p>Objects have members consisting of functions and data (methods and instance variables, respectively). When you call a method, you invoke it on an object: the method has access to that object’s functions and data. Use a dot (.) to refer to an instance variable or method:</p>
 <pre>
 var p = Point(2, 2);
@@ -235,22 +184,41 @@ var p2 = new Point.fromJson({'x': 1, 'y': 2});
 
 
 
-
-
-
-
-<h1>Abstract classes</h1>
-<p>Use the abstract modifier to define an abstract class—a class that can’t be instantiated. Abstract classes are useful for defining interfaces, often with some implementation.</p>
+<h1>Private instance Members</h1>
+<p>Use <code>_</code>(Underscore) before the member name to make it private to the class itself. The private member can be accessible by the class method itself. You cannot access them from its object.</p>
 <pre>
-// This class is declared abstract and thus
-// can't be instantiated.
-abstract class AbstractContainer {
-  // Define constructors, fields, methods...
+class Person{
+  final string _id; // Private property
+  string name;
 
-  void updateChildren(); // Abstract method.
+  Person._internal(this.name); // private named constructor
+
+  void _generateId(){ // A private method
+    // Code --
+  }
 }
 </pre>
-<p>The methods of an abstruct class is called <code>Abstruct Methods</code>.</p>
+
+
+
+<h1>Summary</h1>
+<p>In this section we have learned the following:</p>
+<ul>
+  <li>How to declare a class.</li>
+  <li>Instance Members: Instance Variables and Instance Methods.</li>
+  <li>Constructor: Unnamed and Named Constructor.</li>
+  <li>How to use instance members using dot notation.</li>
+  <li>How to create object using the Constructor.</li>
+  <li>How to create private instance member.</li>
+</ul>
+<p>In the next section we will explore various parts of the class.</p>
+
+
+
+
+
+
+
 
 
 

@@ -2,11 +2,11 @@
 <html>
 <head>
 	<title>Setting Up Redux in Flutter</title>
-	<link rel="stylesheet" type="text/css" href="../Assets/bulma.css">
-	<link rel="stylesheet" type="text/css" href="../Assets/Style.css">
-	<script type="text/javascript" src="../Assets/prism.min.js"></script>
-	<script type="text/javascript" src="../Assets/jquery.min.js"></script>
-  <link rel="stylesheet" href="../Assets/prism-dark.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/bulma.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/Style.css">
+	<script type="text/javascript" src="../../Assets/prism.min.js"></script>
+	<script type="text/javascript" src="../../Assets/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../Assets/prism-dark.css">
 </head>
 <body class="Body">
 <div class="Content Card">
@@ -14,9 +14,9 @@
 
 
 
-<h1>Setting Up Redux in Flutter</h1>
+<h1>Redux</h1>
 <p>Redux is an architecture with a unidirectional data flow that makes it easy to develop applications that are easy to test and maintain.</p>
-<img src="Assets/redux-architecture-overview.png">
+<img src="../Assets/redux-architecture-overview.png">
 <p>In Redux there's a <code>Store</code> which holds a <code>State</code> object that represents the state of the whole application. Every application event (either from the user or external) is represented as an <code>Action</code> that gets dispatched to a <code>Reducer</code> function. This <code>Reducer</code> updates the <code>Store</code> with a new <code>State</code> depending on what <code>Action</code> it receives.</p>
 <p>And whenever a new <code>State</code> is pushed through the <code>Store</code> the <code>View</code> is recreated to reflect the changes.</p>
 <p>With Redux most components are decoupled, making UI changes very easy to make. In addition, the only business logic sits in the <code>Reducer</code> functions. A <code>Reducer</code> is a function that takes an <code>Action</code> and the current application <code>State</code> and it returns a new <code>State</code> object.</p>
@@ -30,7 +30,7 @@
 <p>The above at first glance appears to be straightforward, but what happens when the application has to perform some asynchronous operation, such as loading data from an external API? This is why people came up with a new component known as the <code>Middleware</code>.</p>
 <p><code>Middleware</code> is a component that may process an <code>Action</code> before it reaches the <code>Reducer</code>. It receives the current application <code>State</code> and the <code>Action</code> that got dispatched, and it can run some code (usually a side effect), such as communicating with a 3rd-party API or data source. Finally, the Middleware may decide to dispatch the original <code>Action</code>, to dispatch a different one, or to do nothing more.</p>
 <p>With the <code>Middleware</code>, the above diagram would look like this:</p>
-<img src="Assets/redux-architecture-overview-middleware.png">
+<img src="../Assets/redux-architecture-overview-middleware.png">
 
 
 
@@ -44,88 +44,8 @@
 
 
 
-
-
-
-<h1>Code</h1>
-<p>I’ve created a basic to-do list app to demonstrate the concepts discussed above. Let’s go through the important parts.</p>
-<p>First, the <code>main.dart</code> file (which is our app’s entry point) defines the application <code>Store</code> object from an initial <code>State</code>, a <code>Reducer</code> function and the <code>Middleware</code>. It then it wraps the <code>MaterialApp</code> object with a <code>StoreProvider</code> that takes the <code>Store</code> and can pass it to its descendant Widgets that need one:</p>
-<pre>
-void main() => runApp(ToDoListApp());
-
-class ToDoListApp extends StatelessWidget {
-	final Store<AppState> store = Store<AppState>(
-		appReducer, /* Function defined in the reducers file */
-		initialState: AppState.initial(),
-		middleware: createStoreMiddleware(),
-	);
-
-	@override
-	Widget build(BuildContext context) => StoreProvider(
-		store: this.store,
-		child: MaterialApp(
-			// Omitting some boilerplate here
-			home: ToDoListPage(title: 'Flutter Demo Home Page'),
-		),
-	);
-}
-</pre>
-<p>The followin <code>AppState</code> class contains the list of to-do items and a field to decide whether or not to display the <code>TextField</code> to add a new item:</p>
-<pre>
-class AppState {
-	final List&lt;ToDoItem> toDos;
-	final ListState listState;
-
-	AppState(this.toDos, this.listState);
-
-	factory AppState.initial() => AppState(List.unmodifiable([]), ListState.listOnly);
-}
-
-enum ListState {
-	listOnly, listWithNewItem
-}
-</pre>
-<p>In order to display the to-do list, we define a <code>ViewModel</code> class that contains a view-specific representation of the data we need to display, as well as the actions the user can do. This <code>ViewModel</code> gets created from the <code>Store</code>:</p>
-<pre>
-class _ViewModel {
-	final String pageTitle;
-	final List<_ItemViewModel> items;
-	final Function onNewItem;
-	final String newItemToolTip;
-
-	_ViewModel(this.pageTitle, this.items, this.onNewItem, this.newItemToolTip, this.newItemIcon);
-
-	factory _ViewModel.create(Store<AppState> store) {
-		List<_ItemViewModel> items = store.state.toDos
-		.map((ToDoItem item) => /* Omitting some boilerplate here */)
-		.toList();
-
-    	return _ViewModel('To Do', items, () => store.dispatch(DisplayListWithNewItemAction()), 'Add new to-do item', Icons.add);
-	}
-}
-</pre>
-<p>Now we can use the <code>ViewModel</code> class to display the to-do list. Notice that we wrap our Widgets inside a <code>StoreConnector</code> which allows us to create the <code>ViewModel</code> from the <code>Store</code> and build our UI using the <code>ViewModel</code>:</p>
-<pre>
-class ToDoListPage extends StatelessWidget {
-	@override
-	Widget build(BuildContext context) => StoreConnector<AppState, _ViewModel>(
-		converter: (Store<AppState> store) => _ViewModel.create(store),
-		builder: (BuildContext context, _ViewModel viewModel) => Scaffold(
-			appBar: AppBar(
-				title: Text(viewModel.pageTitle),
-			),
-			body: ListView(
-				children: viewModel.items.map((_ItemViewModel item) => _createWidget(item)).toList()
-			),
-			floatingActionButton: FloatingActionButton(
-				onPressed: viewModel.onNewItem,
-				tooltip: viewModel.newItemToolTip,
-				child: Icon(viewModel.newItemIcon),
-			),
-		),
-	);
-}
-</pre>
+<h1>StoreConnector</h1>
+<p>The widget <code>StoreConnector</code> is used to build UI based on redux state. The StoreConnector requires two different things, converter and builder. It is convertor’s job to convert the data into appropriate view model that can later be used by the builder function to build the user interface.</p>
 
 
 
