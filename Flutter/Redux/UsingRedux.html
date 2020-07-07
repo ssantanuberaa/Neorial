@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Using a Package in Flutter</title>
+	<link rel="stylesheet" type="text/css" href="../../Assets/bulma.css">
+	<link rel="stylesheet" type="text/css" href="../../Assets/Style.css">
+	<script type="text/javascript" src="../../Assets/prism.min.js"></script>
+	<script type="text/javascript" src="../../Assets/jquery.min.js"></script>
+  <link rel="stylesheet" href="../../Assets/prism-dark.css">
+</head>
+<body class="Body">
+<div class="Content Card">
+
+
+
+<h1>Using Redux</h1>
+<p>First add two dependencies and install the packages:</p>
+<pre>
+redux: ^4.0.0
+flutter_redux: ^0.6.0
+</pre>
+<p>After that pull in these two plugin in your project:</p>
+<pre>
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+</pre>
+
+<h3>Directory Structure</h3>
+<p>Now We need to structure our directory like the following:</p>
+<pre>
+lib
+	actions
+	models
+	reducers
+	pages
+	main.dart	
+</pre>
+
+<h3>actions</h3>
+<p>In <code>actions</code> folder we will store all actions. Actions specifies a name about a specific task that will take place. Redux will use this actions to dispatch it. This action will go to reducer. The action has two part, one is the name of the action and another is payload or data. The general structure of a action with some payload looks like the following:</p>
+<pre>
+// action/actions.dart
+
+class ActionName{
+	int payload1;
+	String payload2;
+	bool payload3;
+
+	ActionName(this.payload1, this.payload2, this.payload3)
+}
+</pre>
+<p>If you don't want payload, just the action name, the structure would look like following:</p>
+<pre>
+class ActionName{
+	ActionName();
+}
+</pre>
+<p>The class name is used as action name and instance members are used as payloads. That means an action is an instance of a particular class with some data it contains.</p>
+<p>The Redux library uses this action instance to send it to the reducer. As your application grows, your app will contain several actions with different name. The reducer will take this action instance and check what type of action it is, and according to the action the reducer will update the state and return it.</p>
+<p>To dispatch an action using redux use the following code:</p>
+<pre>
+StoreProvider.of&lt;AppState>(context).dispatch(ActionName(payload1, payload2, payload3));
+</pre>
+<p>Look at the <code>dispatch</code> method, we are passing an action instance as the argument. That instance becomes the signature of the action that the reducer will get.</p>
+
+
+
+
+<h3>models</h3>
+<p>The <code>models</code> directory is used to store application data model. For example, if your application stores a notebook, you might defines a model that describes about a notebook. A model is nothing but a class with some instance members and optional instance methods.</p>
+<p>Here is an example of a model:</p>
+<pre>
+// models/NoteBookModel.dart
+
+class NoteBookModel{
+	int id;
+	String created_at;
+	String updated_at;
+	String name;
+	List&lt;Map&lt;String, dynamic>> notes;
+
+	NoteBookModel({this.id, this.created_at, this.updated_at, this.name, this.notes});
+
+	NoteBookModel.fromJSON(Map&lt;String, dynamic> json){
+		id = json["id"];
+		created_at = json["created_at"];
+		updated_at = json["updated_at"];
+		name = json["name"];
+		if(json["notes"] == null){
+			notes = [];
+		}else{
+			notes = json['notes'];
+		}
+	}
+}
+</pre>
+<p>Your application might contain several models to describes different kind of data. If a single file requires multiple model, you need to manually import the required models. If your application is big and contains a lots of model it is very tedius work. You can create a file called <code>models.dart</code>, that imports all the models and export all of them. So that in your dart file, you will only need to import the <code>models.dart</code> file to access any model you want, instead of seperately importing them. Here is how you can do it:</p>
+<pre>
+// models/models.dart
+
+export 'app_state.dart';
+export 'NoteBookModel.dart';
+</pre>
+<p>Now, if you import <code>models.dart</code>, the model <code>NoteBookModel</code> will be available automatically.</p>
+<p>In Redux, the application state is represented as a Model. So one of the file in <code>models</code> directory must be dedicated for Redux state. Create a model that describes Redux state. Here is an example:</p>
+<pre>
+// models/app_state.dart
+
+import "NoteBookModel.dart";
+
+@immutable
+class AppState {	
+  	// User Data --
+  	int userid;
+  	String email;
+  	NoteBookModel selectedNoteBook;
+  	int selectedNoteBookId;
+	List&lt;NoteBookModel> notebooks;
+
+
+	// Constructor --
+	AppState();
+
+	AppState.initial(){
+		userid = 0;
+		email = "";
+		selectedNoteBook = null;
+		selectedNoteBookId = null;
+		notebooks = [];
+	}
+
+	AppState.fromAppState(AppState state){
+		userid = state.userid;
+		email = state.email;
+		selectedNoteBook = state.selectedNoteBook;
+		selectedNoteBookId = state.selectedNoteBookId;
+		notebooks = state.notebooks;
+	}
+}
+</pre>
+<p>Redux library will use this <code>AppState</code> model as single source of data which represents the state of the application. In the above model we have two named constructor, leter we will know their use cases.</p>
+
+<h3>reducers</h3>
+<p>The directory <code>reducers</code> will contain reducers. A reducer is nothing but a pure function. When you dispatch an action, the Redux library will call the reducer function and pass the action as an argument. Here is an example:</p>
+<pre>
+// reducers/reducer.dart
+
+import '../models/models.dart';
+import "../actions/actions.dart";
+
+AppState appReducer(AppState state, action){
+
+	AppState newState = AppState.fromAppState(state);
+
+	if(action is InitUser){
+		newState.userid = action.userid;
+		newState.email = action.email;
+	}else if(action is LoginUser){
+		// Modify the state 
+	}else if(action is LogoutUser){
+		// Modify the state 
+	}else if(action is ActionName){
+		// Modify the state 
+	}
+
+	return newState;
+}
+</pre>
+<p>In the above example we have created a file <code>reducer.dart</code> which will contain the reducer function. The reducer function <code>appReducer</code> has two parameters, one is <code>state</code> and another is <code>action</code>. This function is called automatically when you dispatch an action. The return type of the reducer function must be same as the type of <code>state</code>. The type of the state is <code>AppState</code>, thats why the return type is <code>AppState</code>. The reducer function will return the modified version of the state.</p>
+<p>The first statement is:</p>
+<pre>
+AppState newState = AppState.fromAppState(state);
+</pre>
+<p>This statement creates a new state <code>newState</code> from the old state <code>state</code>. We have used <code>fromAppState</code> named constructor to make a new instance of the state. This is necessary because the state is immutable and you should not modify it directly. Instead create a new modified version of the state and return it from the reducer function.</p>
+<p>After that we are checking what kind of action is dispatched, and according to the action the modification will take place. In the above example we have updated the <code>userid</code> and <code>email</code> field of the state from the action payloads.</p>
+<pre>
+newState.userid = action.userid;
+newState.email = action.email;
+</pre>
+<p>We are taking <code>userid</code> and <code>email</code> from the payload and assigning it to the new state <code>newState</code>. Finally we are returning the <code>newState</code> from the reducer function.</p>
+<pre>
+return newState;
+</pre>
+
+
+<h1>Initialization of Store</h1>
+<p>Before using Redux you must create store and initialize it with reducer and state. You should do it in <code>main.dart</code> file and before <code>runApp</code> call. Here is an example:</p>
+<pre>
+// main.dart
+
+// Import Redux packages --
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+// Import models --
+import 'models/models.dart';
+
+// Import reducer --
+import 'reducers/app_reducer.dart';
+
+// Creating Redux Store --
+final store = Store&lt;AppState>(
+	appReducer,
+	initialState: AppState.initial(),
+);
+</pre>
+<p>The Redux package provides <code>Store()</code> method to create a Redux store. The first argument is the reducer function. Second argument is the initial state. Here are are using <code>initial()</code> named constructor to create a <code>AppState</code> object with initial values.</p>
+
+<h1>StoreProvider()</h1>
+<p>The Redux library comes with <code>StoreProvider</code> widget, that makes it easy to inject the store in all the child in the widget tree.</p>
+<pre>
+runApp(StoreProvider(store: store, child: MyApp()));
+</pre>
+
+
+<h1>StoreConnector()</h1>
+<p>Now you have done setting up Redux in your project with creating models, reducers, actions and creating store and then using <code>StoreProvider</code> widget to inject the <code>store</code> in child widget tree. Now let's see how we can listen to the changes and dispatch an action.</p>
+<p><code>StoreConnector</code> Widget lets you build widget based on the Redux state. This widget has two property, <code>converter</code> and <code>builder</code>. The general structure of the widget looks like following:</p>
+<pre>
+// pages/page.dart
+
+import 'package:flutter_redux/flutter_redux.dart';
+import '../models/models.dart';
+
+StoreConnector&lt;AppState, String>(
+	converter: (store) (
+		return store.state.email;
+	),
+	builder: (context, viewModel){
+		return Text(viewModel);
+	}
+),
+</pre>
+<p>Note that the type <code>&lt;AppState, String></code> after the widget name. The first type represents the type of the <code>state</code> that the converter will receive as the parameter. In this case it is always <code>AppState</code> as we have defined our <code>state</code> in <code>AppState</code> class. The second type specifies the type of the data that the converter will return. As the converter returns a string (store.state.email), we have specified the second parameter as <code>String</code>.</p>
+<p>The converter function runs first and it returns a value. That returned value goes to the <code>builder</code> function as the parameter <code>viewModel</code>.</p>
+<p>So the idea is the converter function convert the state into a view model and returns it. And that view model as passed to builder function as the second argument so that the builder function uses that value and decides what UI should be drawn. Depending on the view model passed to the builder function, you can return different widget.</p>
+<p>The <code>converter</code> function must not be asynchronous.</p>
+
+
+<h1>Dispatching Action</h1>
+<p>The StoreConnector widget rebuilds itself whenever the state changes. And to change the state, you need to dispatch an action. To dispatch an action use the following code:</p>
+<pre>
+import 'package:flutter_redux/flutter_redux.dart';
+import '../actions/actions.dart';
+
+StoreProvider.of&lt;AppState>(context).dispatch(ActionName(payloads));
+</pre>
+<p>When the above statement runs, the reducer function gets executed. The reducer function now creates a new state which is the modified version of the old state and returns the new modified state. Whenever reducer function returns a new state, it will cause <code>StoreConnector</code> to receives the new state and rebuild the widget, the converter and builder altogether.</p>
+<p>You can dispatch action either from <code>builder</code> function of the <code>StoreConnector</code> widget or from anywhere of the code.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</body>
+</html>

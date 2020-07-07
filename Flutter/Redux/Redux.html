@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Setting Up Redux in Flutter</title>
+	<title>Using a Package in Flutter</title>
 	<link rel="stylesheet" type="text/css" href="../../Assets/bulma.css">
 	<link rel="stylesheet" type="text/css" href="../../Assets/Style.css">
 	<script type="text/javascript" src="../../Assets/prism.min.js"></script>
@@ -10,7 +10,6 @@
 </head>
 <body class="Body">
 <div class="Content Card">
-
 
 
 
@@ -41,16 +40,6 @@
 	<li><code>flutter_redux</code> : This is a Flutter-specific package which provides additional components on top of the <code>redux</code> library which are useful for implementing Redux in Flutter, such as: <code>StoreProvider</code> (the base Widget for the app that will be used to provide the <code>Store</code> to all the Widgets that need it), <code>StoreBuilder</code> (a Widget that receives the <code>Store</code> from the <code>StoreProvider</code>) and <code>StoreConnector</code> (a very useful Widget that can be used instead of the <code>StoreBuilder</code> as you can convert the <code>Store</code> into a <code>ViewModel</code> to build the Widget tree and whenever the <code>State</code> in the <code>Store</code> is modified, the <code>StoreConnector</code> will get rebuilt).
 </li>
 </ul>
-
-
-
-<h1>StoreConnector</h1>
-<p>The widget <code>StoreConnector</code> is used to build UI based on redux state. The StoreConnector requires two different things, converter and builder. It is convertor’s job to convert the data into appropriate view model that can later be used by the builder function to build the user interface.</p>
-
-
-
-
-
 
 
 
