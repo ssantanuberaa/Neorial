@@ -82,11 +82,12 @@ FutureBuilder(
 ),
 </pre>
 <h3>snpashot</h3>
-<p>The argument <code>snapshot</code> has three properties:</p>
+<p>The argument <code>snapshot</code> has four properties:</p>
 <ul>
   <li><code>hasData</code>: Becomes <code>true</code> when the Future resolves to the value.</li>
   <li><code>hasError</code>: Becomes <code>true</code> when the Future encounters an error. Like the future contains an exception.</li>
-  <li><code>data</code>: You can access the future data through this property. So your widget may use <code>snapshot.data</code> to obtain the data from the snapshot.</li>
+  <li><code>data</code>: You can access the future data through this property. So your widget may use <code>snapshot.data</code>: User to obtain the data from the snapshot.</li>
+  <li><code>connectionState</code>: It contains <code>ConnectionState</code> enum value. It changes during the lifecycle of the provided future.</li>
 </ul>
 
 
@@ -180,6 +181,33 @@ class _MyAppState extends State&lt;MyApp> {
 }
 </pre>
 
+
+<h1>ConnectionState</h1>
+<p>The <code>snapshot</code> argument of the <code>builder</code> callback contains a <code>ConnectionState</code> enum value which changes during the life cycle of the provided future object. Here is an example:</p>
+<pre>
+FutureBuilder(
+  future: future,
+  builder: (context, snapshot){
+    switch (snapshot.connectionState) {
+      case ConnectionState.none:
+        print("Connection is still yet to make");
+      case ConnectionState.waiting:
+        print("Connection is waiting for Future to be completed");
+        print("Show Loading Indicator");
+      case ConnectionState.active:
+        print("Connection is Active");
+      case ConnectionState.done:
+        print("Future has completed");
+    }
+  }
+);
+</pre>
+
+<h1>connectionSate vs hasData</h1>
+<p>Within the <code>builder</code> callback you can use both either use <code>hasData</code> or <code>connectionState</code> to determine what to show to the user. But there is a difference.</p>
+<p>Consider this example where you have initialized the <code>FutureBuilder</code> widget with a future object. In your code you show a spinner until the content loads and when the content loads you show the content. It works fine. Now you dynamically change the future object. What would you expect that the builder function should receive a fresh snapshot so that you will show the spinner again until the new future object completes and then show the content. But no, when you dynamically change the future object the snapshot will still contain the old value, the value of the previous future object which is completed and contains data. When the new future is completed, then you will receive new snapshot based on the new provided future and it will contain the value of new future. So the problem is from the point you change the future object dynamically with a new future object and to the point the new future completes, your snapshot is still the old snapshot that was received when the previous future completed. So you won't be able to show a spinner after you change the future dynamically if you use <code>snapshot.hasData</code> to determine if the snapshot has data or not.</p>
+<p>The solution is to use <code>connectionState</code> instead of <code>hasData</code>. Even though after changing the future object the snapshot will contain previous data, the <code>connectionState</code> will be new.</p>
+<p>That's why it is recommended to use <code>connectionState</code> whenever possible.</p>
 
 
 

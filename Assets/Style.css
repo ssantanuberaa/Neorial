@@ -19,9 +19,7 @@ pre{
   transition: all .5s;
   background-color: #fff;
   padding: 20px;
-}
-.Card:hover {
-  box-shadow: 0 6px 6px rgba(0,0,0,0.25), 0 6px 6px rgba(0,0,0,0.22);
+  margin-bottom: 1px;
 }
 code{
 	font-size: 14px;
@@ -121,4 +119,8 @@ h1, h2, h3, h4{
 }
 h1+p, h2+p, h3+p, h4+p{
   margin-top: 0;
+}
+.CardDescription{
+  margin-top: 0;
+  margin-bottom: 0;
 }
