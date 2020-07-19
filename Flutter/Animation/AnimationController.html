@@ -320,6 +320,33 @@ class _TestState extends State&lt;Test> with SingleTickerProviderStateMixin{
 </pre>
 <p>In the above example, the lowerBound is set to 100 and upperBound is set to 300, that means the generated value will be from 100 to 300. The controller will keep generating the values from 100 to 300 for whole 1 seconds and using the <code>setState()</code> we are updating the UI frequently to turn it into animation.</p>
 
+
+
+
+<h1>AnimationController Properties</h1>
+<h3>value</h3>
+<p>Using the <code>value</code> property you can get the current value of the animation.</p>
+<pre>
+_controller.value
+</pre>
+
+<h3>status</h3>
+<p>The property <code>status</code> represents the current animation status. The status is represented by the <code>AnimationStatus</code> enum. This enum defines the following four constants:</p>
+<ul>
+  <li><code>completed</code>: The animation is stopped at the end.</li>
+  <li><code>dismissed</code>: The animation is stopped at the beginning.</li>
+  <li><code>forward</code>: The animation is running from beginning to end.</li>
+  <li><code>reverse</code>: The animation is running backwards, from end to beginning.</li>
+</ul>
+
+
+
+
+
+
+
+
+
 <h1>AnimationController Methods</h1>
 <h3>.forward()</h3>
 <p>This method starts the animation. That means it starts generating values from lowerBound to upperBound.</p>
@@ -363,10 +390,45 @@ _controller.stop();
 </pre>
 
 
+<h3>addListener()</h3>
+<p>You can attach a callback(listener) with the controller. The callback will be called each time the controller changes its value. The method <code>addListener()</code> takes one argument which is the callback. The callback doesn't have any parameter.</p>
+<pre>
+_controller.addListener((){
+  print("New value : " + _controller.value.toString());
+});
+</pre>
+<p>Normally you would change the state so that the UI gets rebuild:</p>
+<pre>
+_controller.addListener((){
+  setState((){});
+});
+</pre>
 
 
 
 
+<h3>addStatusListener()</h3>
+<p>The method <code>addStatusListener()</code> takes a callback as a parameter. This callback is called each time the controller changes its animation status. The callback has one parameter which is <code>AnimationStatus</code> that represents the current status of the animation.</p>
+<pre>
+_controller.addStatusListener((AnimationStatus status){
+  switch(status){
+    case AnimationStatus.forward:
+      print("Animation is running in forward mode !");
+      break;
+    case AnimationStatus.reverse:
+      print("Animation is running in reverse mode !");
+      break;
+    case AnimationStatus.completed:
+      print("Animation has been completed !");
+      break;
+    case AnimationStatus.dismissed:
+      print("Animation is dismissed before it began !");
+      break;
+    default:
+      print("Don't know what to say !");
+  }
+});
+</pre>
 
 
 
