@@ -80,7 +80,10 @@ class _TestState extends State&lt;Test> with SingleTickerProviderStateMixin{
   }
 }
 </pre>
-<p>We will use this example throughout this tutorial. In the above example our state class implements <code>SingleTickerProviderStateMixin</code>, and that makes the state class attached to the ticker. The <code>vsync</code> property of the <code>AnimationController</code> constructor is used to provide the ticker. </p>
+<p>We will use this example throughout this tutorial. In the above example our state class implements <code>SingleTickerProviderStateMixin</code>, and that makes the state class attached to the ticker. The <code>vsync</code> property of the <code>AnimationController</code> constructor is used to provide the ticker.</p>
+<p>If you implement <code>SingleTickerProviderStateMixin</code>, you can use only one AnimationController in the class. If you want to use multiple AnimationController you must implements <code>TickerProviderStateMixin</code> instead of <code>SingleTickerProviderStateMixin</code>. If your class have only one AnimationController it is better and efficient to use <code>SingleTickerProviderMixin</code>.</p>
+
+ 
 
 <h3>Animation</h3>
 <p>An Animation is nothing else but a value (of a specific type) that can change over the lifetime of the animation. The way the value changes over the time of the animation can be linear (like 1, 2, 3, 4, 5…) or much more complex (see Curves, later).</p>

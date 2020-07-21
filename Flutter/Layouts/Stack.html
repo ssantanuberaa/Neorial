@@ -171,6 +171,22 @@ IndexedStack(
 
 
 
+<h1>Gesture on Stack</h1>
+<p>Using the <code>Positioned</code> widget you can make a widget float on the Stack. You can use <code>overflow</code> property to make the overflowed content visible. But there is a major drawback. </p>
+
+<p>The overflowed area of a Stack doesn't respond to the gesture. If you have a Positioned element where part of it is inside the Stack's bound and other part of the element is outside the Stack's bound. If you click on the part that is inside the Stack's bound, it will respond, but when you click on the part that is outside of the Stack's bound, it will not respond to any gesture. So overflowing content can be useful only when you don't need gesture for the overflowed content. </p>
+
+<p>This is not a bug though, it is intentional by the Flutter developers.</p>
+
+<p>The thing is overflowing is never welcomed in Stack layout or any layout in Flutter. It is always good practice to make you layout in a way that it fits inside its parent's bound.</p>
+
+<p>To know more about this problem see this <a href="https://github.com/flutter/flutter/issues/19445">issue</a> on Github.</p>
+
+
+
+
+
+
 
 
 
